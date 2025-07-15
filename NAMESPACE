@@ -1,3 +1,3 @@
-useDynLib(ERMeta, .registration=TRUE)
+useDynLib(EDMeta, .registration=TRUE)
 importFrom(Rcpp, evalCpp)
 exportPattern("^[[:alpha:]]+")
