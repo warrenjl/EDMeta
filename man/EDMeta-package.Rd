@@ -1,30 +1,30 @@
-\name{ERMeta-package}
-\alias{ERMeta-package}
-\alias{ERMeta}
+\name{EDMeta-package}
+\alias{EDMeta-package}
+\alias{EDMeta}
 \docType{package}
 \title{
-\packageTitle{ERMeta}
+\packageTitle{EDMeta}
 }
 \description{
-\packageDescription{ERMeta}
+\packageDescription{EDMeta}
 }
 \details{
 %%  ~~ An overview of how to use the package, ~~
 %%  ~~ including the most important functions ~~
 }
 \author{
-\packageAuthor{ERMeta}
+\packageAuthor{EDMeta}
 
-Maintainer: \packageMaintainer{ERMeta}
+Maintainer: \packageMaintainer{EDMeta}
 }
 \references{
 %%  ~~ Literature or other references for background information ~~
 }
 \keyword{package}
 
-%% Uncomment below to imitate parts of library(help = ERMeta)
-%\section{The \file{DESCRIPTION} File}{\packageDESCRIPTION{ERMeta}}
-%\section{Documentation Index}{\packageIndices{ERMeta}}
+%% Uncomment below to imitate parts of library(help = EDMeta)
+%\section{The \file{DESCRIPTION} File}{\packageDESCRIPTION{EDMeta}}
+%\section{Documentation Index}{\packageIndices{EDMeta}}
 
 \seealso{
 %%  ~~ Optional links to other man pages, e.g. ~~
