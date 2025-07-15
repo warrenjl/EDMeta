@@ -13,7 +13,7 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 
 // EDMeta
 Rcpp::List EDMeta(int mcmc_samples, arma::vec beta_hat, arma::vec se, arma::vec min_exposure, arma::vec max_exposure, arma::vec mid_exposure, arma::vec sd_exposure, int exposure_distribution, double metrop_sd_phi_eta_trans, Rcpp::Nullable<int> m_approx, Rcpp::Nullable<int> m_star_approx, Rcpp::Nullable<double> sigma2_mu_prior, Rcpp::Nullable<double> a_tau2_prior, Rcpp::Nullable<double> b_tau2_prior, Rcpp::Nullable<double> a_sigma2_eta_prior, Rcpp::Nullable<double> b_sigma2_eta_prior, Rcpp::Nullable<double> a_phi_eta_prior, Rcpp::Nullable<double> b_phi_eta_prior, Rcpp::Nullable<double> mu_init, Rcpp::Nullable<arma::vec> eta_star_init, Rcpp::Nullable<double> tau2_init, Rcpp::Nullable<double> sigma2_eta_init, Rcpp::Nullable<double> phi_eta_init);
-RcppExport SEXP _ERMeta_EDMeta(SEXP mcmc_samplesSEXP, SEXP beta_hatSEXP, SEXP seSEXP, SEXP min_exposureSEXP, SEXP max_exposureSEXP, SEXP mid_exposureSEXP, SEXP sd_exposureSEXP, SEXP exposure_distributionSEXP, SEXP metrop_sd_phi_eta_transSEXP, SEXP m_approxSEXP, SEXP m_star_approxSEXP, SEXP sigma2_mu_priorSEXP, SEXP a_tau2_priorSEXP, SEXP b_tau2_priorSEXP, SEXP a_sigma2_eta_priorSEXP, SEXP b_sigma2_eta_priorSEXP, SEXP a_phi_eta_priorSEXP, SEXP b_phi_eta_priorSEXP, SEXP mu_initSEXP, SEXP eta_star_initSEXP, SEXP tau2_initSEXP, SEXP sigma2_eta_initSEXP, SEXP phi_eta_initSEXP) {
+RcppExport SEXP _EDMeta_EDMeta(SEXP mcmc_samplesSEXP, SEXP beta_hatSEXP, SEXP seSEXP, SEXP min_exposureSEXP, SEXP max_exposureSEXP, SEXP mid_exposureSEXP, SEXP sd_exposureSEXP, SEXP exposure_distributionSEXP, SEXP metrop_sd_phi_eta_transSEXP, SEXP m_approxSEXP, SEXP m_star_approxSEXP, SEXP sigma2_mu_priorSEXP, SEXP a_tau2_priorSEXP, SEXP b_tau2_priorSEXP, SEXP a_sigma2_eta_priorSEXP, SEXP b_sigma2_eta_priorSEXP, SEXP a_phi_eta_priorSEXP, SEXP b_phi_eta_priorSEXP, SEXP mu_initSEXP, SEXP eta_star_initSEXP, SEXP tau2_initSEXP, SEXP sigma2_eta_initSEXP, SEXP phi_eta_initSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -46,7 +46,7 @@ END_RCPP
 }
 // beta_true_update
 arma::vec beta_true_update(arma::vec beta_hat, arma::mat inv_var_mat, int n, double mu_old, arma::vec eta_star_old, double tau2_old, arma::mat Sigma_eta_star_inv, arma::mat x);
-RcppExport SEXP _ERMeta_beta_true_update(SEXP beta_hatSEXP, SEXP inv_var_matSEXP, SEXP nSEXP, SEXP mu_oldSEXP, SEXP eta_star_oldSEXP, SEXP tau2_oldSEXP, SEXP Sigma_eta_star_invSEXP, SEXP xSEXP) {
+RcppExport SEXP _EDMeta_beta_true_update(SEXP beta_hatSEXP, SEXP inv_var_matSEXP, SEXP nSEXP, SEXP mu_oldSEXP, SEXP eta_star_oldSEXP, SEXP tau2_oldSEXP, SEXP Sigma_eta_star_invSEXP, SEXP xSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -64,7 +64,7 @@ END_RCPP
 }
 // eta_star_update
 arma::vec eta_star_update(arma::vec beta_hat, int m_star, arma::vec beta_true, double mu, double tau2_old, double sigma2_eta_old, arma::mat Sigma_eta_star_inv, arma::mat x);
-RcppExport SEXP _ERMeta_eta_star_update(SEXP beta_hatSEXP, SEXP m_starSEXP, SEXP beta_trueSEXP, SEXP muSEXP, SEXP tau2_oldSEXP, SEXP sigma2_eta_oldSEXP, SEXP Sigma_eta_star_invSEXP, SEXP xSEXP) {
+RcppExport SEXP _EDMeta_eta_star_update(SEXP beta_hatSEXP, SEXP m_starSEXP, SEXP beta_trueSEXP, SEXP muSEXP, SEXP tau2_oldSEXP, SEXP sigma2_eta_oldSEXP, SEXP Sigma_eta_star_invSEXP, SEXP xSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -82,7 +82,7 @@ END_RCPP
 }
 // mu_update
 double mu_update(int n, double sigma2_mu_inv, arma::vec beta_true, arma::vec eta_star_old, double tau2_old, arma::mat Sigma_eta_star_inv, arma::mat x);
-RcppExport SEXP _ERMeta_mu_update(SEXP nSEXP, SEXP sigma2_mu_invSEXP, SEXP beta_trueSEXP, SEXP eta_star_oldSEXP, SEXP tau2_oldSEXP, SEXP Sigma_eta_star_invSEXP, SEXP xSEXP) {
+RcppExport SEXP _EDMeta_mu_update(SEXP nSEXP, SEXP sigma2_mu_invSEXP, SEXP beta_trueSEXP, SEXP eta_star_oldSEXP, SEXP tau2_oldSEXP, SEXP Sigma_eta_star_invSEXP, SEXP xSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -99,7 +99,7 @@ END_RCPP
 }
 // neg_two_loglike_update
 double neg_two_loglike_update(arma::vec beta_hat, arma::vec se, int n, double mu, double tau2, arma::vec eta_star, arma::mat Sigma_eta_star_inv, arma::mat x);
-RcppExport SEXP _ERMeta_neg_two_loglike_update(SEXP beta_hatSEXP, SEXP seSEXP, SEXP nSEXP, SEXP muSEXP, SEXP tau2SEXP, SEXP eta_starSEXP, SEXP Sigma_eta_star_invSEXP, SEXP xSEXP) {
+RcppExport SEXP _EDMeta_neg_two_loglike_update(SEXP beta_hatSEXP, SEXP seSEXP, SEXP nSEXP, SEXP muSEXP, SEXP tau2SEXP, SEXP eta_starSEXP, SEXP Sigma_eta_star_invSEXP, SEXP xSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -117,7 +117,7 @@ END_RCPP
 }
 // phi_eta_update
 Rcpp::List phi_eta_update(int n, int m, arma::vec min_exposure, arma::vec max_exposure, std::vector<arma::mat> abs_d_diffs, arma::mat abs_d_star_diffs, std::vector<arma::mat> exposure_dens, double a_phi_eta, double b_phi_eta, arma::vec beta_true, double mu, double tau2, arma::vec eta_star, double sigma2_eta, double phi_eta_old, arma::mat Sigma_eta_star_inv, arma::mat x, double Sigma_eta_star_inv_log_deter, double metrop_sd_phi_eta_trans, int acctot_phi_eta_trans);
-RcppExport SEXP _ERMeta_phi_eta_update(SEXP nSEXP, SEXP mSEXP, SEXP min_exposureSEXP, SEXP max_exposureSEXP, SEXP abs_d_diffsSEXP, SEXP abs_d_star_diffsSEXP, SEXP exposure_densSEXP, SEXP a_phi_etaSEXP, SEXP b_phi_etaSEXP, SEXP beta_trueSEXP, SEXP muSEXP, SEXP tau2SEXP, SEXP eta_starSEXP, SEXP sigma2_etaSEXP, SEXP phi_eta_oldSEXP, SEXP Sigma_eta_star_invSEXP, SEXP xSEXP, SEXP Sigma_eta_star_inv_log_deterSEXP, SEXP metrop_sd_phi_eta_transSEXP, SEXP acctot_phi_eta_transSEXP) {
+RcppExport SEXP _EDMeta_phi_eta_update(SEXP nSEXP, SEXP mSEXP, SEXP min_exposureSEXP, SEXP max_exposureSEXP, SEXP abs_d_diffsSEXP, SEXP abs_d_star_diffsSEXP, SEXP exposure_densSEXP, SEXP a_phi_etaSEXP, SEXP b_phi_etaSEXP, SEXP beta_trueSEXP, SEXP muSEXP, SEXP tau2SEXP, SEXP eta_starSEXP, SEXP sigma2_etaSEXP, SEXP phi_eta_oldSEXP, SEXP Sigma_eta_star_invSEXP, SEXP xSEXP, SEXP Sigma_eta_star_inv_log_deterSEXP, SEXP metrop_sd_phi_eta_transSEXP, SEXP acctot_phi_eta_transSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -147,7 +147,7 @@ END_RCPP
 }
 // sigma2_eta_update
 double sigma2_eta_update(int m_star, double a_sigma2_eta, double b_sigma2_eta, arma::vec eta_star, arma::mat Sigma_eta_star_inv);
-RcppExport SEXP _ERMeta_sigma2_eta_update(SEXP m_starSEXP, SEXP a_sigma2_etaSEXP, SEXP b_sigma2_etaSEXP, SEXP eta_starSEXP, SEXP Sigma_eta_star_invSEXP) {
+RcppExport SEXP _EDMeta_sigma2_eta_update(SEXP m_starSEXP, SEXP a_sigma2_etaSEXP, SEXP b_sigma2_etaSEXP, SEXP eta_starSEXP, SEXP Sigma_eta_star_invSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -162,7 +162,7 @@ END_RCPP
 }
 // tau2_update
 double tau2_update(int n, double a_tau2, double b_tau2, arma::vec beta_true, double mu, arma::vec eta_star, arma::mat Sigma_eta_star_inv, arma::mat x);
-RcppExport SEXP _ERMeta_tau2_update(SEXP nSEXP, SEXP a_tau2SEXP, SEXP b_tau2SEXP, SEXP beta_trueSEXP, SEXP muSEXP, SEXP eta_starSEXP, SEXP Sigma_eta_star_invSEXP, SEXP xSEXP) {
+RcppExport SEXP _EDMeta_tau2_update(SEXP nSEXP, SEXP a_tau2SEXP, SEXP b_tau2SEXP, SEXP beta_trueSEXP, SEXP muSEXP, SEXP eta_starSEXP, SEXP Sigma_eta_star_invSEXP, SEXP xSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -180,18 +180,18 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_ERMeta_EDMeta", (DL_FUNC) &_ERMeta_EDMeta, 23},
-    {"_ERMeta_beta_true_update", (DL_FUNC) &_ERMeta_beta_true_update, 8},
-    {"_ERMeta_eta_star_update", (DL_FUNC) &_ERMeta_eta_star_update, 8},
-    {"_ERMeta_mu_update", (DL_FUNC) &_ERMeta_mu_update, 7},
-    {"_ERMeta_neg_two_loglike_update", (DL_FUNC) &_ERMeta_neg_two_loglike_update, 8},
-    {"_ERMeta_phi_eta_update", (DL_FUNC) &_ERMeta_phi_eta_update, 20},
-    {"_ERMeta_sigma2_eta_update", (DL_FUNC) &_ERMeta_sigma2_eta_update, 5},
-    {"_ERMeta_tau2_update", (DL_FUNC) &_ERMeta_tau2_update, 8},
+    {"_EDMeta_EDMeta", (DL_FUNC) &_EDMeta_EDMeta, 23},
+    {"_EDMeta_beta_true_update", (DL_FUNC) &_EDMeta_beta_true_update, 8},
+    {"_EDMeta_eta_star_update", (DL_FUNC) &_EDMeta_eta_star_update, 8},
+    {"_EDMeta_mu_update", (DL_FUNC) &_EDMeta_mu_update, 7},
+    {"_EDMeta_neg_two_loglike_update", (DL_FUNC) &_EDMeta_neg_two_loglike_update, 8},
+    {"_EDMeta_phi_eta_update", (DL_FUNC) &_EDMeta_phi_eta_update, 20},
+    {"_EDMeta_sigma2_eta_update", (DL_FUNC) &_EDMeta_sigma2_eta_update, 5},
+    {"_EDMeta_tau2_update", (DL_FUNC) &_EDMeta_tau2_update, 8},
     {NULL, NULL, 0}
 };
 
-RcppExport void R_init_ERMeta(DllInfo *dll) {
+RcppExport void R_init_EDMeta(DllInfo *dll) {
     R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
     R_useDynamicSymbols(dll, FALSE);
 }
