@@ -119,6 +119,7 @@ arma::vec tau2(mcmc_samples); tau2.fill(0.00);
 arma::vec sigma2_eta(mcmc_samples); sigma2_eta.fill(0.00);
 arma::vec phi_eta(mcmc_samples); phi_eta.fill(0.00);
 arma::vec neg_two_loglike(mcmc_samples); neg_two_loglike.fill(0.00);
+arma::mat eta(n, mcmc_samples); eta.fill(0.00);
 
 //Prior Information
 double sigma2_mu = 10000.00;
@@ -207,6 +208,9 @@ neg_two_loglike(0) = neg_two_loglike_update(beta_hat,
                                             eta_star.col(0),
                                             Sigma_eta_star_inv,
                                             x);
+
+eta.col(0) = x*(Sigma_eta_star_inv*eta_star.col(0));
+
 //Metropolis Settings
 int acctot_phi_eta_trans = 0;
 
@@ -295,6 +299,9 @@ for(int j = 1; j < mcmc_samples; ++j){
                                                eta_star.col(j),
                                                Sigma_eta_star_inv,
                                                x);
+   
+   //eta
+   eta.col(j) = x*(Sigma_eta_star_inv*eta_star.col(j));
       
    //Progress
    if((j + 1) % 10 == 0){ 
@@ -322,7 +329,8 @@ for(int j = 1; j < mcmc_samples; ++j){
                             Rcpp::Named("sigma2_eta") = sigma2_eta,
                             Rcpp::Named("phi_eta") = phi_eta,
                             Rcpp::Named("neg_two_loglike") = neg_two_loglike,
-                            Rcpp::Named("acctot_phi_eta_trans") = acctot_phi_eta_trans);
+                            Rcpp::Named("acctot_phi_eta_trans") = acctot_phi_eta_trans,
+                            Rcpp::Named("eta") = eta);
    
   }
 
