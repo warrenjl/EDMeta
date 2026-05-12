@@ -79,7 +79,7 @@ Rcpp::List EDMeta(int mcmc_samples,
                   arma::vec max_exposure,
                   arma::vec mid_exposure,
                   arma::vec sd_exposure,
-                  int exposure_distribution,         //0: Uniform; 1: Gaussian
+                  int exposure_distribution,         //0: Uniform; 1: Truncated Gaussian
                   double metrop_sd_phi_eta_trans,
                   Rcpp::Nullable<int> m_approx,      //Integral Approximation
                   Rcpp::Nullable<int> m_star_approx, //Predictive Process Approximation

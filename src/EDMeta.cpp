@@ -13,7 +13,7 @@ Rcpp::List EDMeta(int mcmc_samples,
                   arma::vec max_exposure,
                   arma::vec mid_exposure,
                   arma::vec sd_exposure,
-                  int exposure_distribution,                      //0: Uniform; 1: Gaussian
+                  int exposure_distribution,                      //0: Uniform; 1: Truncated Gaussian
                   double metrop_sd_phi_eta_trans,
                   Rcpp::Nullable<int> m_approx = R_NilValue,      //Integral Approximation
                   Rcpp::Nullable<int> m_star_approx = R_NilValue, //Predictive Process Approximation
@@ -70,17 +70,23 @@ for(int j = 0; j < n; ++j){
      
      }
     
-   if(exposure_distribution == 1){  //Gaussian distribution  
+   if(exposure_distribution == 1){  //Truncated Gaussian distribution  
      
      arma::mat dens(m, m_star); dens.fill(0.00);
      for(int k = 0; k < m; ++k){
        
         double val = d(j, k);
         for(int l = 0; l < m_star; ++l){
-           dens(k, l) = R::dnorm(val, 
+          
+           double raw = R::dnorm(val, 
                                  mid_exposure(j), 
                                  sd_exposure(j), 
                                  false);
+           double denom = R::pnorm(max_exposure(j), mid_exposure(j), sd_exposure(j), true, false) +
+                          - R::pnorm(min_exposure(j), mid_exposure(j), sd_exposure(j), true, false);
+          
+           dens(k, l) = raw/denom;
+            
            }
         
         }
