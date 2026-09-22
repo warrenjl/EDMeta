@@ -54,9 +54,13 @@ arma::mat d(n, m); d.fill(0.00);
 std::vector<arma::mat> exposure_dens(n);
 for(int j = 0; j < n; ++j){
   
-   d.row(j) = linspace<rowvec>(min_exposure(j), 
-                               max_exposure(j), 
+   double delta = (max_exposure(j) - min_exposure(j))/m;
+   d.row(j) = linspace<rowvec>((min_exposure(j) + delta/2.00), 
+                               (max_exposure(j) - delta/2.00), 
                                m);
+   //d.row(j) = linspace<rowvec>(min_exposure(j), 
+   //                            max_exposure(j), 
+   //                            m);
   
    if(exposure_distribution == 0){  //Uniform distribution
     
