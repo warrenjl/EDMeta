@@ -1,0 +1,82 @@
+---
+output:
+  pdf_document: default
+  word_document: default
+  html_document: default
+---
+
+# EDMeta: Exposure-Distribution Meta-Regression Model
+
+## Statistical Model
+
+Let $i = 1, \ldots, n$ index studies. Each study reports an estimated effect $\hat{\beta}_i$ with standard error $\hat{\sigma}_i$, along with a summary of its study-specific exposure distribution on $[l_i, u_i]$.
+
+$$\hat{\beta}_i | \beta_i \stackrel{\text{ind}}{\sim} \text{Normal}\left(\beta_i,\ \hat{\sigma}_i^2\right), \quad i = 1, \ldots, n;$$
+
+$$\beta_i | \mu, \eta(\cdot), \tau^2 \stackrel{\text{ind}}{\sim} \text{Normal}\left(\mu + \int_{l_i}^{u_i} \eta(x)\, g_i(x)\, dx,\ \tau^2\right);$$
+
+$$\int_{l_i}^{u_i} \eta(x)\, g_i(x)\, dx \approx \mathbf{x}_i^\top \left(\widetilde{\boldsymbol{\Omega}}(\rho)^{-1} \tilde{\boldsymbol{\eta}}\right);$$
+
+$$x_{ij} = \frac{u_i - l_i}{m} \sum_{k=1}^{m} K(d_{ik}, d_j^*;\, \rho)\, g_i(d_{ik}), \quad j = 1, \ldots, m^*;$$
+
+* $\beta_i$: latent true effect for study $i$;
+
+* $\mu$: pooled mean effect;
+
+* $\eta(\cdot)$: latent exposure-response function of primary interest;
+
+* $\delta(x) = \mu + \eta(x)$: the exposure-response function reported in posterior inference;
+
+* $\tau^2$: between-study variance;
+
+* $g_i(\cdot)$: study-specific exposure density on $[l_i, u_i]$; either Uniform$(l_i, u_i)$ (`exposure_distribution = 0`) or Truncated Normal with mean `mid_exposure`$_i$ and standard deviation `sd_exposure`$_i$, truncated to $[l_i, u_i]$ (`exposure_distribution = 1`);
+
+* $d_{i1}, \ldots, d_{im}$: equally-spaced midpoint quadrature points across $[l_i, u_i]$, with $d_{ik} = l_i + \left(k - \tfrac{1}{2}\right)\tfrac{u_i - l_i}{m}$;
+
+* $d_1^*, \ldots, d_{m^*}^*$: equally-spaced knots spanning $[l^*, u^*]$, where $l^* = \min_i l_i$ and $u^* = \max_i u_i$;
+
+* $K(x, x';\, \rho) = \exp\!\left\{-\rho\,\tfrac{|x - x'|}{u^*}\right\}$: exponential correlation function; $\rho > 0$ controls the rate of decay with exposure distance;
+
+* $\mathbf{x}_i = (x_{i1}, \ldots, x_{im^*})^\top$: predictive process basis vector for study $i$;
+
+* $\tilde{\boldsymbol{\eta}} = (\tilde{\eta}(d_1^*), \ldots, \tilde{\eta}(d_{m^*}^*))^\top$: GP values at the knot locations;
+
+* $[\widetilde{\boldsymbol{\Omega}}(\rho)]_{jj'} = K(d_j^*, d_{j'}^*;\, \rho)$: $m^* \times m^*$ correlation matrix at the knots.
+
+## Prior Information
+
+$$\mu \sim \text{Normal}(0,\ \sigma^2_\mu);$$
+
+$$\tau^2 \sim \text{Inverse-Gamma}(a_{\tau^2},\ b_{\tau^2});$$
+
+$$\tilde{\boldsymbol{\eta}} | \sigma^2 \sim \text{Normal}\!\left(\mathbf{0}_{m^*},\ \sigma^2\, \widetilde{\boldsymbol{\Omega}}(\rho)\right);$$
+
+$$\sigma^2 \sim \text{Inverse-Gamma}(a_{\sigma^2},\ b_{\sigma^2});$$
+
+$$\rho \sim \text{Gamma}(a_\rho,\ b_\rho);$$
+
+* Default: $\sigma^2_\mu = 10000$, $a_{\tau^2} = b_{\tau^2} = 0.01$, $a_{\sigma^2} = b_{\sigma^2} = 0.01$, $a_\rho = b_\rho = 1$.
+
+## Default Initial Values
+
+$$\beta_i^{(0)} = \hat{\beta}_i, \quad i = 1, \ldots, n;$$
+
+$$\mu^{(0)} = 0;$$
+
+$$\tilde{\boldsymbol{\eta}}^{(0)} = \mathbf{0}_{m^*};$$
+
+$$\tau^{2(0)} = 1;$$
+
+$$\sigma^{2(0)} = 1;$$
+
+$$\rho^{(0)} = 1.$$
+
+## Metropolis Settings
+
+* $\rho$ is updated via a Metropolis step on the log scale. The tuning parameter `metrop_sd_phi_eta_trans` controls the proposal standard deviation; target acceptance rate 20--40%.
+
+## Approximation Settings
+
+* `m_approx` ($m$): number of midpoint quadrature points per study used to approximate the integral over $g_i(\cdot)$. Default: 100.
+
+* `m_star_approx` ($m^*$): number of predictive process knots spanning $[l^*, u^*]$. Default: 100.

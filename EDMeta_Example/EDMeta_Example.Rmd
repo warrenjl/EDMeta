@@ -1,0 +1,121 @@
+---
+output:
+  pdf_document: default
+  word_document: default
+  html_document: default
+---
+
+# EDMeta: Example
+
+```{r, include = FALSE}
+library(EDMeta)
+library(matrixStats)
+library(ggplot2)
+set.seed(663)
+```
+
+## 1. Loading Data
+
+We illustrate EDMeta using data from a published meta-analysis of long-term PM$_{2.5}$ exposure and all-cause mortality (Chen and Hoek, 2020), which includes $n = 25$ cohort study-specific effect estimates and standard errors, each standardized to a 10 $\mu$g/m$^3$ increase in PM$_{2.5}$, along with four exposure distribution summary metrics for each study: lower bound (`min_exposure`), upper bound (`max_exposure`), central value (`mid_exposure`), and standard deviation (`sd_exposure`).
+
+```{r}
+load(url("https://raw.githubusercontent.com/warrenjl/EDMeta/main/EDMeta_Example/Chen_Hoek_2020.RData"))
+```
+
+## 2. Fitting the Model
+
+We fit EDMeta using a truncated normal exposure distribution (`exposure_distribution = 1`) for each study, parameterized by the reported central value and standard deviation and truncated to the reported exposure range.
+
+```{r, results = "hide"}
+results <- EDMeta(mcmc_samples            = 110000,
+                  beta_hat                = final$estimate,
+                  se                      = final$se,
+                  min_exposure            = final$min_exposure,
+                  max_exposure            = final$max_exposure,
+                  mid_exposure            = final$mid_exposure,
+                  sd_exposure             = final$sd_exposure,
+                  exposure_distribution   = 1,
+                  metrop_sd_phi_eta_trans = 0.75)
+```
+
+## 3. Analyzing Output
+
+```{r}
+# Burn-in and thinning
+burnin   <- 10000
+thin     <- 10
+keep_set <- seq(burnin + 1, length(results$mu), by = thin)
+
+# Posterior summaries for scalar parameters
+params <- data.frame(
+  Parameter = c("mu", "tau2", "sigma2_eta", "phi_eta"),
+  Mean      = round(c(mean(results$mu[keep_set]),
+                      mean(results$tau2[keep_set]),
+                      mean(results$sigma2_eta[keep_set]),
+                      mean(results$phi_eta[keep_set])), 3),
+  Lower95   = round(c(quantile(results$mu[keep_set],       0.025),
+                      quantile(results$tau2[keep_set],     0.025),
+                      quantile(results$sigma2_eta[keep_set], 0.025),
+                      quantile(results$phi_eta[keep_set],  0.025)), 3),
+  Upper95   = round(c(quantile(results$mu[keep_set],       0.975),
+                      quantile(results$tau2[keep_set],     0.975),
+                      quantile(results$sigma2_eta[keep_set], 0.975),
+                      quantile(results$phi_eta[keep_set],  0.975)), 3)
+)
+print(params)
+
+# Metropolis acceptance rate for phi_eta
+cat("phi_eta acceptance rate:", 
+    round(100 * results$acctot_phi_eta_trans / (110000 - 1)), "%\n")
+```
+
+```{r}
+# Construct prediction grid and compute posterior exposure-response curve
+n      <- nrow(final)
+m      <- 100
+m_star <- 100
+
+a_star <- min(final$min_exposure)
+b_star <- max(final$max_exposure)
+
+d_star <- seq(a_star, b_star, length.out = m_star)
+d_pred <- seq(a_star, b_star, length.out = m)
+
+abs_d_star_diffs  <- abs(outer(d_star, d_star, "-")) / b_star
+abs_d_diffs_pred  <- abs(outer(d_pred, d_star, "-")) / b_star
+
+curve <- matrix(NA, nrow = m, ncol = length(keep_set))
+for (j in 1:length(keep_set)) {
+  Sigma_inv <- chol2inv(chol(exp(-results$phi_eta[keep_set[j]] * abs_d_star_diffs)))
+  x_pred    <- exp(-results$phi_eta[keep_set[j]] * abs_d_diffs_pred)
+  curve[, j] <- results$mu[keep_set[j]] +
+                x_pred %*% (Sigma_inv %*% results$eta_star[, keep_set[j]])
+}
+
+curve_summary <- data.frame(
+  d_pred = d_pred,
+  mean   = rowMeans(curve),
+  lower  = rowQuantiles(curve, probs = 0.025),
+  upper  = rowQuantiles(curve, probs = 0.975)
+)
+
+# Plot posterior exposure-response curve
+ggplot(curve_summary, aes(x = d_pred, y = mean)) +
+  geom_ribbon(aes(ymin = lower, ymax = upper),
+              fill = "steelblue", alpha = 0.2) +
+  geom_line(linewidth = 1, color = "steelblue4") +
+  geom_point(data = final,
+             aes(x = mid_exposure, y = estimate),
+             shape = 19, size = 2, color = "black") +
+  geom_vline(xintercept = min(final$mid_exposure),
+             linetype = "dashed", color = "gray40", linewidth = 0.5) +
+  geom_vline(xintercept = max(final$mid_exposure),
+             linetype = "dashed", color = "gray40", linewidth = 0.5) +
+  geom_hline(yintercept = 0,
+             linetype = "dashed", color = "black", linewidth = 0.5) +
+  labs(x = expression(PM[2.5]~Exposure~(mu*g/m^3)),
+       y = expression(mu + eta(x))) +
+  scale_x_continuous(expand = c(0.01, 0)) +
+  scale_y_continuous(expand = c(0.01, 0)) +
+  theme_classic(base_size = 14)
+```
