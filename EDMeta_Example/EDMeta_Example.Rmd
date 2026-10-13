@@ -8,6 +8,7 @@ output:
 # EDMeta: Example
 
 ```{r, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
 library(EDMeta)
 library(matrixStats)
 library(ggplot2)
@@ -48,17 +49,14 @@ keep_set <- seq(burnin + 1, length(results$mu), by = thin)
 
 # Posterior summaries for scalar parameters
 params <- data.frame(
-  Parameter = c("mu", "tau2", "sigma2_eta", "phi_eta"),
-  Mean      = round(c(mean(results$mu[keep_set]),
-                      mean(results$tau2[keep_set]),
+  Parameter = c("tau2", "sigma2_eta", "phi_eta"),
+  Mean      = round(c(mean(results$tau2[keep_set]),
                       mean(results$sigma2_eta[keep_set]),
                       mean(results$phi_eta[keep_set])), 3),
-  Lower95   = round(c(quantile(results$mu[keep_set],       0.025),
-                      quantile(results$tau2[keep_set],     0.025),
+  Lower95   = round(c(quantile(results$tau2[keep_set],     0.025),
                       quantile(results$sigma2_eta[keep_set], 0.025),
                       quantile(results$phi_eta[keep_set],  0.025)), 3),
-  Upper95   = round(c(quantile(results$mu[keep_set],       0.975),
-                      quantile(results$tau2[keep_set],     0.975),
+  Upper95   = round(c(quantile(results$tau2[keep_set],     0.975),
                       quantile(results$sigma2_eta[keep_set], 0.975),
                       quantile(results$phi_eta[keep_set],  0.975)), 3)
 )
