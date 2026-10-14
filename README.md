@@ -4,5 +4,5 @@ EDMeta implements a hierarchical Bayesian Gaussian process meta-regression frame
 
 ## Reference
 
-Warren, J.L., Xu, X., and Liew, Z. (2025+). Exposure-Distribution Meta-Regression for Environmental Health Studies. *\[Journal]*. DOI: \[pending].
+Warren JL, Xu X, Guo P, and Liew Z (2026). Exposure distribution meta-regression for estimating nonlinear exposure-response relationships. *In Preparation*.
 
